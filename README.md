@@ -1,1 +1,41 @@
-# CS121_Lab_7
+# Student Records
+
+## Class Diagram
+
+```mermaid
+classDiagram
+
+class Student{
+    firstName: string
+    lastName: string
+    address: Address
+    birthDate: Date
+    creditHours: int
+    Student()
+    init(string studentString)
+    printStudent()
+    getLastFirst(): string
+}
+
+class Address{
+    street: string
+    city: string
+    state: string
+    zip: string
+    Address()
+    init(street, city, state, zip)
+    printAddress()
+}
+
+class Date{
+    month: int
+    day: int
+    year: int
+    Date()
+    init(dateString)
+    printDate()
+}
+
+Student --> Address
+Student --> Date
+```
