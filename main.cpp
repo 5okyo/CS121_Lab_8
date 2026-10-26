@@ -1,4 +1,7 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
 #include "date.h"
 #include "address.h"
 #include "student.h"
@@ -7,13 +10,93 @@ void testAddress();
 void testDate();
 void testStudent();
 
+void loadStudents(std::vector<Student*>&);
+void printStudents(std::vector<Student*>&);
+void showStudentNames(std::vector<Student*>&);
+void findStudent(std::vector<Student*>&);
+void delStudents(std::vector<Student*>&);
+std::string menu();
+
+
+
+
 int main(){
-  std::cout << "Hello!" << std::endl;
-  testAddress();
-  testDate();
-  testStudent();
+  std::vector<Student*> students;
+  loadStudents(students);
+
+  std::string choice = menu();
+  while (choice != "0"){
+    if (choice == "1")      showStudentNames(students);
+    else if (choice == "2") printStudents(students);
+    else if (choice == "3") findStudent(students);
+    choice = menu();
+  }
+
+  delStudents(students);
   return 0;
-} // end main
+}
+
+ void loadStudents(std::vector<Student*>& students){
+  	std::ifstream inFile;
+  	std::string currentLine; 
+  	inFile.open("students.csv");
+  	while(getline(inFile, currentLine)){
+	  	Student* s = new Student();
+	  	s->init(currentLine);
+	  	students.push_back(s);
+  	}
+
+  	inFile.close();
+  }
+
+
+void printStudents(std::vector<Student*>& students){
+	for (Student* student : students){
+		student->printStudent();
+		std::cout << std::endl;
+	}
+}
+
+
+std::string menu(){
+	std::string choice;
+	std::cout << std::endl;
+	std::cout << "0) quit" << std::endl;
+	std::cout << "1) print all student names" << std::endl;
+	std::cout << "2) print all student data" << std::endl;
+	std::cout << "3) find a student" << std::endl;
+	std::cout << std::endl;
+	std::cout << "please choose 0-3: ";
+	std::getline(std::cin, choice);
+	return choice;
+}
+
+
+
+void showStudentNames(std::vector<Student*>& students){
+	for (Student* student : students){
+		std::cout << student->getLastFirst() << std::endl;
+		std::cout << ',' << student->getCreditHours() << std::endl;
+	}
+}
+
+void findStudent(std::vector<Student*>& students){
+	std::string search;
+	std::cout << "last name of student: ";
+	std::getline(std::cin, search);
+
+	for (Student* student : students){
+		if (student->getLastName().find(search) != std::string::npos){
+			student->printStudent();
+		}
+	}
+}     
+
+void delStudents(std::vector<Student*>& students){
+	for(Student* student : students){
+		delete student;
+	}
+}
 
 void testAddress(){
   Address a;
